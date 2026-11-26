@@ -16,6 +16,25 @@ $("eot").innerHTML = PRICES.eot.map(([a,p]) => row(a,"",p)).join("");
 $("abnb").innerHTML = PRICES.abnb.map(([a,p]) => row(a,"",p)).join("");
 $("addons").innerHTML = ADDONS.map(([a,s,p]) => row(a,s,p)).join("");
 
+// ---- Interactive Hero Checklist ----
+const ROOMS = {
+  kitchen: ["Oven cleaned inside & racks degreased", "Hob, extractor fan & splashback", "Behind and under white goods", "Inside all cupboards and drawers", "Sink descaled & polished", "Floors vacuumed and washed"],
+  bath: ["Shower screen, tiles & taps descaled", "Toilet sanitised inside and out", "Extractor fan & mirrors polished", "Inside vanity units & cabinets", "Towel rails & skirting boards wiped", "Floors scrubbed and sanitised"],
+  rooms: ["Skirting boards, doors & light switches", "Inside wardrobes & built-in storage", "Internal windows, sills & frames", "Cobwebs removed from ceilings", "Radiators wiped down", "Carpets vacuumed / hard floors mopped"]
+};
+
+function renderRoom(room) {
+  $("roomList").innerHTML = ROOMS[room].map(item => `<li>${item}</li>`).join("");
+}
+document.querySelectorAll(".tab").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelector(".tab.active").classList.remove("active");
+    btn.classList.add("active");
+    renderRoom(btn.dataset.room);
+  });
+});
+renderRoom("kitchen");
+
 // ---- Estimator ----
 let lastEstimate = "";
 function fillSizes() {
@@ -43,9 +62,27 @@ function calc() {
   $("lines").innerHTML = lines.map(([a,p]) => `<li><span>${a}</span><span>£${p}</span></li>`).join("");
   lastEstimate = `Estimate: £${total} (${lines.map(l => l[0]).join("; ")})`;
 }
-$("calc").addEventListener("input", e => { if (e.target.id === "svc") fillSizes(); calc(); });
+
+// Pill & Stepper listeners
+document.querySelectorAll("#svcPills .pill").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelector("#svcPills .pill.active").classList.remove("active");
+    btn.classList.add("active");
+    $("svc").value = btn.dataset.val;
+    fillSizes(); calc();
+  });
+});
+document.querySelectorAll("[data-step]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const inp = $(btn.dataset.step);
+    inp.value = Math.max(0, (parseInt(inp.value) || 0) + parseInt(btn.dataset.d));
+    calc();
+  });
+});
+
+$("calc").addEventListener("input", () => calc());
 $("useEst").addEventListener("click", () => {
-  $("fService").value = $("svc").selectedOptions[0].text;
+  $("fService").value = document.querySelector("#svcPills .pill.active").textContent;
   $("fDetails").value = lastEstimate + "\n";
 });
 fillSizes(); calc();
