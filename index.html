@@ -6,7 +6,7 @@
 <title>Lamah Property Services | End of tenancy and deep cleaning in London</title>
 <meta name="description" content="End of tenancy, deep and Airbnb cleaning across London. Instant price estimate, written quotes, before and after photos and a 72-hour re-clean guarantee.">
 <meta property="og:title" content="Lamah Property Services"><meta property="og:description" content="Property cleaning across London for tenants, landlords and letting agents."><meta property="og:type" content="website">
-<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Lora:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -15,7 +15,7 @@
 <body>
 <header class="top"><div class="in">
   <a href="#top" class="brand"><img src="logo.svg" alt="Lamah Property Services" width="150" height="39"></a>
-  <nav aria-label="Main"><a href="#services">Services</a><a href="#estimate">Price estimate</a><a href="#prices">Prices</a><a href="#faq">FAQ</a><a class="btn sm" href="#quote">Get a quote</a></nav>
+  <nav aria-label="Main"><a href="#services">Services</a><a href="#estimate">Pricing</a><a href="#faq">FAQ</a><a class="btn sm" href="#quote">Get a quote</a></nav>
 </div></header>
 
 <main id="top">
@@ -26,8 +26,12 @@
     <p class="actions"><a class="btn" href="#estimate">Get an instant estimate</a><a class="btn ghost" href="https://wa.me/447867027554">WhatsApp us</a></p>
   </div>
   <aside class="check" aria-label="Checkout checklist">
-    <h2>Checkout checklist</h2>
-    <ul><li>Oven cleaned inside</li><li>Bathroom descaled</li><li>Behind and under appliances</li><li>Inside cupboards and drawers</li><li>Skirting boards and switches</li><li>Floors washed</li></ul>
+    <div class="tabs" role="tablist">
+      <button type="button" class="tab active" data-room="kitchen">Kitchen</button>
+      <button type="button" class="tab" data-room="bath">Bathroom</button>
+      <button type="button" class="tab" data-room="rooms">Rooms &amp; Hall</button>
+    </div>
+    <ul id="roomList"></ul>
     <p>Every job is cleaned room by room, then photographed.</p>
   </aside>
 </section>
@@ -56,12 +60,22 @@
   <p class="intro">Choose your service and property. The estimate uses our price guide, and we confirm your final price in writing.</p>
   <div class="est-grid">
     <form id="calc" aria-label="Price estimate">
-      <label>Service<select id="svc"><option value="eot">End of tenancy cleaning</option><option value="abnb">Airbnb cleaning</option><option value="carpet">Carpet cleaning only</option></select></label>
+      <div class="field">
+        <span class="lbl">Service</span>
+        <div class="pills" id="svcPills">
+          <button type="button" class="pill active" data-val="eot">End of tenancy</button>
+          <button type="button" class="pill" data-val="abnb">Airbnb clean</button>
+          <button type="button" class="pill" data-val="carpet">Carpet only</button>
+        </div>
+        <input type="hidden" id="svc" value="eot">
+      </div>
       <label id="sizeWrap">Property size<select id="size"></select></label>
-      <label>Carpeted rooms<input id="carpets" type="number" min="0" value="0"></label>
-      <label>Additional reception rooms<input id="recep" type="number" min="0" value="0"></label>
-      <label>Additional bathrooms or en-suites<input id="baths" type="number" min="0" value="0"></label>
-      <label>Additional separate WCs<input id="wcs" type="number" min="0" value="0"></label>
+      <div class="steppers">
+        <div class="step-row"><span>Carpeted rooms (£55)</span><div class="stepper"><button type="button" data-step="carpets" data-d="-1">−</button><input id="carpets" type="number" min="0" value="0" readonly><button type="button" data-step="carpets" data-d="1">+</button></div></div>
+        <div class="step-row"><span>Extra reception rooms (£70)</span><div class="stepper"><button type="button" data-step="recep" data-d="-1">−</button><input id="recep" type="number" min="0" value="0" readonly><button type="button" data-step="recep" data-d="1">+</button></div></div>
+        <div class="step-row"><span>Extra bathrooms (£50)</span><div class="stepper"><button type="button" data-step="baths" data-d="-1">−</button><input id="baths" type="number" min="0" value="0" readonly><button type="button" data-step="baths" data-d="1">+</button></div></div>
+        <div class="step-row"><span>Extra separate WCs (£30)</span><div class="stepper"><button type="button" data-step="wcs" data-d="-1">−</button><input id="wcs" type="number" min="0" value="0" readonly><button type="button" data-step="wcs" data-d="1">+</button></div></div>
+      </div>
     </form>
     <div class="result" aria-live="polite">
       <p class="small">Estimated price</p><p class="big" id="total">£0</p>
